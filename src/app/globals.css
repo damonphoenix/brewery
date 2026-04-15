@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* Cozy 2026 Tavern - Design tokens */
+:root {
+  --bg-charred: #14100e;
+  --bg-charred-muted: #1c1614;
+  --bg-charred-deep: #0d0a09;
+  --accent-amber: #e08e36;
+  --accent-amber-dim: #b8722b;
+  --accent-amber-glow: rgba(224, 142, 54, 0.12);
+  --text-cream: #eae3d9;
+  --text-cream-muted: #c4bbae;
+  --muted: #8a8175;
+  --border-glow: rgba(224, 142, 54, 0.25);
+  --border-subtle: rgba(234, 227, 217, 0.12);
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans-ui: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+@theme inline {
+  --color-bg-charred: var(--bg-charred);
+  --color-bg-charred-muted: var(--bg-charred-muted);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-amber-dim: var(--accent-amber-dim);
+  --color-text-cream: var(--text-cream);
+  --color-text-cream-muted: var(--text-cream-muted);
+  --color-muted: var(--muted);
+  --color-border-glow: var(--border-glow);
+  --color-border-subtle: var(--border-subtle);
+  --font-sans: var(--font-sans-ui);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-fraunces);
+}
+
+/* Atmosphere: warm base + vignette + subtle grain */
+body {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-charred);
+  color: var(--text-cream);
+  font-family: var(--font-sans-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 0%, rgba(224, 142, 54, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 100%, rgba(13, 10, 9, 0.9) 0%, transparent 50%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
