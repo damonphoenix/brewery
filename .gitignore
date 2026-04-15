@@ -1,21 +1,23 @@
 # dependencies
 node_modules/
 
-# Next.js
+# Next.js build output
 .next/
 out/
 
-# local env files
+# environment / secrets — never commit these
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
 
-# data / sqlite
+# data / local databases
 .data/
 
-# OS
+# OS artifacts
 .DS_Store
 Thumbs.db
 
@@ -27,3 +29,8 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# Cursor / agent session files
+summary.md
+SUMMARY.md

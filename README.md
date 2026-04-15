@@ -1,30 +1,94 @@
 # Taverrn
 
-> Brew your files — 100% local, straight from the tap.
+> **Brew your files — 100% local, straight from the tap.**
 
-Taverrn is a browser-based file converter. Drop any file on the bar counter and convert it to another format without ever leaving your device. No uploads, no servers, no data leaving your machine.
+Taverrn is a privacy-first, browser-based file converter. Drop any supported file on the bar counter and convert it to another format — entirely on your device. No uploads. No servers. No data ever leaves your machine.
 
-## Features
+---
 
-- **100% local processing** — WASM-powered conversions run entirely in your browser
-- **Images** — JPG, PNG, WebP, GIF, TIFF, BMP, AVIF, HEIC, SVG, PDF, RAW formats
-- **Audio** — WAV, MP3, OGG, FLAC, M4A
-- **Video** — MP4, WebM, MOV, AVI, MKV, WMV, FLV + audio extraction
-- **Text / Data** — JSON, CSV, Parquet, NDJSON, log files
+## How it works
+
+1. **Drop your ingredient** — drag a file onto the bar counter, or click to browse
+2. **Pick your brew** — choose the output format from the menu that appears
+3. **Download** — your converted file is ready instantly
+
+Everything runs in WebAssembly inside your browser tab.
+
+---
+
+## Supported formats
+
+| Category | Input formats | Output formats |
+|---|---|---|
+| **Image** | JPG, PNG, WebP, GIF, TIFF, BMP, AVIF, HEIC, SVG, PDF | JPG, PNG, WebP, GIF, TIFF, BMP, AVIF, HEIC, SVG, PDF |
+| **Audio** | MP3, WAV, OGG, FLAC, M4A | MP3, WAV, OGG, FLAC, M4A |
+| **Video** | MP4, MOV, AVI, MKV, WebM, WMV, FLV | MP4, MOV, AVI, MKV, WebM, WMV, FLV, GIF, MP3, WAV |
+| **Text / Data** | JSON, NDJSON, CSV, Parquet | JSON, CSV, Parquet |
+
+---
 
 ## Getting started
 
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Run locally
+
 ```bash
+git clone https://github.com/damonphoenix/Taverrn.git
+cd Taverrn
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Build for production
+
+```bash
+npm run build
+npm start
+```
+
+---
+
 ## Tech stack
 
-- [Next.js 16](https://nextjs.org) (App Router)
-- [Tailwind CSS v4](https://tailwindcss.com)
-- [Framer Motion](https://www.framer.com/motion/)
-- [FFmpeg.wasm](https://ffmpegwasm.netlify.app/) for audio/video
-- [Drizzle ORM](https://orm.drizzle.team/) (schema ready, auth removed for now)
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org) (App Router, React 19) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
+| Animation | [Framer Motion](https://www.framer.com/motion/) |
+| Audio / Video | [FFmpeg.wasm](https://ffmpegwasm.netlify.app/) |
+| Image encoding | [@jsquash](https://github.com/nicolo-ribaudo/jSquash) (AVIF, WebP, JPEG, PNG) |
+| Data formats | [parquet-wasm](https://github.com/kylebarron/parquet-wasm) + [Apache Arrow](https://arrow.apache.org/docs/js/) |
+| Icons | [Lucide React](https://lucide.dev) |
+
+---
+
+## Privacy
+
+Taverrn processes everything client-side. No file content, metadata, or personal data is ever transmitted to any server. See [Privacy Policy](/privacy) for details.
+
+---
+
+## Contributing
+
+Bug reports and feature requests are welcome.
+
+- **Found a bug?** → [Open an issue](https://github.com/damonphoenix/Taverrn/issues/new)
+- **Want to contribute?** → Fork the repo, make your changes, and open a pull request
+
+---
+
+## Support
+
+If Taverrn saved you time, consider [buying a coffee](https://ko-fi.com/damonphoenix). ☕
+
+---
+
+## License
+
+MIT © [Damon Phoenix](https://github.com/damonphoenix)

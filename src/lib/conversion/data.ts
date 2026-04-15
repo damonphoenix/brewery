@@ -16,20 +16,35 @@ function baseNameFromFile(file: File): string {
   return file.name.replace(/\.[^.]+$/, "") || "converted";
 }
 
-/** JSON array of objects → Parquet */
+/** Parse a file as JSON array — handles regular JSON arrays, objects, and NDJSON */
+async function parseAsJsonRows(file: File): Promise<Record<string, unknown>[]> {
+  const text = (await file.text()).trim();
+  // Try regular JSON first
+  try {
+    const parsed = JSON.parse(text);
+    const rows = Array.isArray(parsed) ? parsed : [parsed];
+    if (rows.length === 0) throw new Error("JSON array is empty.");
+    return rows as Record<string, unknown>[];
+  } catch (e) {
+    // Fall back to NDJSON (newline-delimited JSON)
+    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+    if (lines.length === 0) throw new Error("File is empty.");
+    try {
+      return lines.map((l) => JSON.parse(l)) as Record<string, unknown>[];
+    } catch {
+      throw e instanceof Error
+        ? e
+        : new Error("Invalid JSON. We couldn't parse this ingredient.");
+    }
+  }
+}
+
+/** JSON / NDJSON → Parquet */
 export async function jsonToParquet(
   file: File,
   _callbacks?: ConversionCallbacks
 ): Promise<ConversionResult> {
-  const text = await file.text();
-  let data: Record<string, unknown>[];
-  try {
-    const parsed = JSON.parse(text);
-    data = Array.isArray(parsed) ? parsed : [parsed];
-  } catch {
-    throw new Error("Invalid JSON. We couldn't parse this ingredient.");
-  }
-  if (data.length === 0) throw new Error("JSON array is empty.");
+  const data = await parseAsJsonRows(file);
 
   const { arrow, parquet } = await getParquetWasm();
   const table = arrow.tableFromJSON(data as Record<string, unknown>[]);
@@ -49,20 +64,12 @@ export async function jsonToParquet(
   };
 }
 
-/** JSON → CSV (pure JS) */
+/** JSON / NDJSON → CSV */
 export async function jsonToCsv(
   file: File,
   _callbacks?: ConversionCallbacks
 ): Promise<ConversionResult> {
-  const text = await file.text();
-  let data: Record<string, unknown>[];
-  try {
-    const parsed = JSON.parse(text);
-    data = Array.isArray(parsed) ? parsed : [parsed];
-  } catch {
-    throw new Error("Invalid JSON. We couldn't parse this ingredient.");
-  }
-  if (data.length === 0) throw new Error("JSON array is empty.");
+  const data = await parseAsJsonRows(file);
 
   const headers = [...new Set(data.flatMap((row) => Object.keys(row)))];
   const escape = (v: unknown): string => {
@@ -165,11 +172,84 @@ export async function csvToJson(
   };
 }
 
+/** Shared CSV row → string helper */
+function rowsToCsvString(headers: string[], rows: Record<string, unknown>[]): string {
+  const escape = (v: unknown): string => {
+    const s = String(v ?? "");
+    if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  };
+  const lines = [
+    headers.join(","),
+    ...rows.map((row) => headers.map((h) => escape(row[h])).join(",")),
+  ];
+  return lines.join("\n");
+}
+
+/** Parquet → JSON */
+export async function parquetToJson(
+  file: File,
+  callbacks?: ConversionCallbacks
+): Promise<ConversionResult> {
+  const { arrow, parquet } = await getParquetWasm();
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  callbacks?.onProgress?.(30);
+  const ipcBytes = parquet.readParquet(bytes);
+  const table = arrow.tableFromIPC(ipcBytes);
+  callbacks?.onProgress?.(70);
+
+  const numRows = table.numRows;
+  const fields = table.schema.fields.map((f) => f.name);
+  const rows: Record<string, unknown>[] = [];
+  for (let i = 0; i < numRows; i++) {
+    const row: Record<string, unknown> = {};
+    for (const name of fields) {
+      row[name] = table.getChild(name)?.get(i) ?? null;
+    }
+    rows.push(row);
+  }
+
+  callbacks?.onProgress?.(100);
+  const blob = new Blob([JSON.stringify(rows, null, 2)], { type: "application/json" });
+  return { blob, filename: `${baseNameFromFile(file)}.json`, mimeType: "application/json" };
+}
+
+/** Parquet → CSV */
+export async function parquetToCsv(
+  file: File,
+  callbacks?: ConversionCallbacks
+): Promise<ConversionResult> {
+  const { arrow, parquet } = await getParquetWasm();
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  callbacks?.onProgress?.(30);
+  const ipcBytes = parquet.readParquet(bytes);
+  const table = arrow.tableFromIPC(ipcBytes);
+  callbacks?.onProgress?.(70);
+
+  const numRows = table.numRows;
+  const fields = table.schema.fields.map((f) => f.name);
+  const rows: Record<string, unknown>[] = [];
+  for (let i = 0; i < numRows; i++) {
+    const row: Record<string, unknown> = {};
+    for (const name of fields) {
+      row[name] = table.getChild(name)?.get(i) ?? null;
+    }
+    rows.push(row);
+  }
+
+  callbacks?.onProgress?.(100);
+  const csv = rowsToCsvString(fields, rows);
+  const blob = new Blob([csv], { type: "text/csv" });
+  return { blob, filename: `${baseNameFromFile(file)}.csv`, mimeType: "text/csv" };
+}
+
 const DATA_CONVERTERS: Partial<Record<BrewId, (file: File, cb?: ConversionCallbacks) => Promise<ConversionResult>>> = {
   "json-to-parquet": jsonToParquet,
   "json-to-csv": jsonToCsv,
   "csv-to-parquet": csvToParquet,
   "csv-to-json": csvToJson,
+  "parquet-to-json": parquetToJson,
+  "parquet-to-csv": parquetToCsv,
 };
 
 export function runDataConversion(

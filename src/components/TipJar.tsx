@@ -11,7 +11,7 @@ interface TipJarProps {
 
 export function TipJar({ onClose, fileName }: TipJarProps) {
     // Replace this placeholder link with your actual tip link later
-    const tipLink = "https://ko-fi.com/taverrn";
+    const tipLink = "https://ko-fi.com/damonphoenix";
 
     return (
         <div

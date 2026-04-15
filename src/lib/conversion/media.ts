@@ -195,6 +195,64 @@ export async function mp4ToGif(
   };
 }
 
+const AUDIO_FORMAT_IDS: BrewId[] = [
+  "audio-to-mp3",
+  "audio-to-wav",
+  "audio-to-ogg",
+  "audio-to-flac",
+  "audio-to-m4a",
+];
+
+/** Generic audio-to-audio transcode via FFmpeg */
+async function convertAudioTo(
+  file: File,
+  outputExtension: string,
+  outputMime: string,
+  callbacks?: ConversionCallbacks
+): Promise<ConversionResult> {
+  if (file.size > MAX_MEDIA_BYTES)
+    throw new Error(
+      `File is over ${MAX_MEDIA_SIZE_MB}MB. We can't brew such a large ingredient—please use a smaller file.`
+    );
+
+  callbacks?.onProgress?.(null);
+  const { ffmpeg, fetchFile } = await getFFmpeg(callbacks);
+  const inputExt = file.name.split(".").pop()?.toLowerCase() || "mp3";
+  const inputName = `input.${inputExt}`;
+  const outputName = `output.${outputExtension}`;
+  await ffmpeg.writeFile(inputName, await fetchFile(file));
+
+  const args = ["-i", inputName];
+  if (outputExtension === "mp3") {
+    args.push("-acodec", "libmp3lame", "-q:a", "2");
+  } else if (outputExtension === "wav") {
+    args.push("-acodec", "pcm_s16le");
+  } else if (outputExtension === "ogg") {
+    args.push("-acodec", "libvorbis", "-q:a", "4");
+  } else if (outputExtension === "flac") {
+    args.push("-acodec", "flac");
+  } else if (outputExtension === "m4a") {
+    args.push("-acodec", "aac", "-b:a", "192k");
+  }
+  args.push(outputName);
+
+  const code = await ffmpeg.exec(args);
+  if (code !== 0) throw new Error("Conversion failed. The ingredient may be corrupted or unsupported.");
+
+  const data = await ffmpeg.readFile(outputName);
+  const blob = new Blob(
+    [data instanceof Uint8Array ? new Uint8Array(data) : data],
+    { type: outputMime }
+  );
+  const base = file.name.replace(/\.[^.]+$/, "") || "converted";
+  callbacks?.onProgress?.(100);
+  return {
+    blob,
+    filename: `${base}.${outputExtension}`,
+    mimeType: outputMime,
+  };
+}
+
 const VIDEO_TO_FORMAT_IDS: BrewId[] = [
   "video-to-mov",
   "video-to-mp4",
@@ -223,6 +281,13 @@ export function runMediaConversion(
   if (brewId === "wav-to-mp3") return wavToMp3(file, callbacks);
   if (brewId === "mp4-to-gif") return mp4ToGif(file, callbacks);
 
+  // Generic audio transcodes
+  if (AUDIO_FORMAT_IDS.includes(brewId)) {
+    const brew = getBrewById(brewId);
+    if (!brew) throw new Error(`Unsupported audio brew: ${brewId}`);
+    return convertAudioTo(file, brew.outputExtension, brew.outputMime, callbacks);
+  }
+
   // Video extracting to audio
   if (VIDEO_TO_AUDIO_IDS.includes(brewId)) {
     const brew = getBrewById(brewId);
@@ -244,6 +309,7 @@ export function isMediaBrew(brewId: BrewId): boolean {
   return (
     brewId === "wav-to-mp3" ||
     brewId === "mp4-to-gif" ||
+    AUDIO_FORMAT_IDS.includes(brewId) ||
     VIDEO_TO_FORMAT_IDS.includes(brewId) ||
     VIDEO_TO_AUDIO_IDS.includes(brewId)
   );

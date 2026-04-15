@@ -32,7 +32,7 @@ export default function Home() {
         </p>
         <nav
           className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm"
-          aria-label="Legal"
+          aria-label="Footer links"
         >
           <Link
             href="/privacy"
@@ -40,15 +40,22 @@ export default function Home() {
           >
             Privacy Policy
           </Link>
-          <span className="text-[var(--border-subtle)]" aria-hidden>
-            ·
-          </span>
+          <span className="text-[var(--border-subtle)]" aria-hidden>·</span>
           <Link
             href="/terms"
             className="text-[var(--text-cream-muted)] underline decoration-[var(--border-subtle)] underline-offset-4 transition-colors hover:text-[var(--accent-amber)] hover:decoration-[var(--accent-amber)]/50"
           >
             Terms of Service
           </Link>
+          <span className="text-[var(--border-subtle)]" aria-hidden>·</span>
+          <a
+            href="https://github.com/damonphoenix/Taverrn/issues/new"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--text-cream-muted)] underline decoration-[var(--border-subtle)] underline-offset-4 transition-colors hover:text-[var(--accent-amber)] hover:decoration-[var(--accent-amber)]/50"
+          >
+            ew, bugs?
+          </a>
         </nav>
       </footer>
     </main>

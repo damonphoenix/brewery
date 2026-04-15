@@ -5,6 +5,8 @@ export type BrewId =
   | "json-to-csv"
   | "csv-to-parquet"
   | "csv-to-json"
+  | "parquet-to-json"
+  | "parquet-to-csv"
   | "image-to-jpg"
   | "image-to-png"
   | "image-to-webp"
@@ -15,7 +17,11 @@ export type BrewId =
   | "image-to-heic"
   | "image-to-svg"
   | "image-to-pdf"
-  | "wav-to-mp3"
+  | "audio-to-mp3"
+  | "audio-to-wav"
+  | "audio-to-ogg"
+  | "audio-to-flac"
+  | "audio-to-m4a"
   | "mp4-to-gif"
   | "video-to-mov"
   | "video-to-mp4"
@@ -35,10 +41,16 @@ export interface BrewDefinition {
   outputExtension: string;
   /** Media brews (audio/video) enforce 100MB cap */
   isMedia: boolean;
+  /**
+   * When set, this brew only appears for files whose extension is in this list.
+   * Used for text brews where each converter is input-format-specific.
+   */
+  acceptsExtensions?: string[];
 }
 
 const BREWS: Record<FileCategory, BrewDefinition[]> = {
   text: [
+    // JSON / NDJSON inputs
     {
       id: "json-to-parquet",
       label: "Parquet",
@@ -46,6 +58,7 @@ const BREWS: Record<FileCategory, BrewDefinition[]> = {
       outputMime: "application/x-parquet",
       outputExtension: "parquet",
       isMedia: false,
+      acceptsExtensions: ["json", "ndjson"],
     },
     {
       id: "json-to-csv",
@@ -54,7 +67,9 @@ const BREWS: Record<FileCategory, BrewDefinition[]> = {
       outputMime: "text/csv",
       outputExtension: "csv",
       isMedia: false,
+      acceptsExtensions: ["json", "ndjson"],
     },
+    // CSV inputs
     {
       id: "csv-to-parquet",
       label: "Parquet",
@@ -62,14 +77,35 @@ const BREWS: Record<FileCategory, BrewDefinition[]> = {
       outputMime: "application/x-parquet",
       outputExtension: "parquet",
       isMedia: false,
+      acceptsExtensions: ["csv"],
     },
     {
       id: "csv-to-json",
       label: "JSON",
-      description: "JSON array or NDJSON",
+      description: "JSON array",
       outputMime: "application/json",
       outputExtension: "json",
       isMedia: false,
+      acceptsExtensions: ["csv"],
+    },
+    // Parquet inputs
+    {
+      id: "parquet-to-json",
+      label: "JSON",
+      description: "JSON array",
+      outputMime: "application/json",
+      outputExtension: "json",
+      isMedia: false,
+      acceptsExtensions: ["parquet"],
+    },
+    {
+      id: "parquet-to-csv",
+      label: "CSV",
+      description: "Comma-separated values",
+      outputMime: "text/csv",
+      outputExtension: "csv",
+      isMedia: false,
+      acceptsExtensions: ["parquet"],
     },
   ],
   image: [
@@ -85,14 +121,11 @@ const BREWS: Record<FileCategory, BrewDefinition[]> = {
     { id: "image-to-pdf", label: "PDF", description: "PDF (single page)", outputMime: "application/pdf", outputExtension: "pdf", isMedia: false },
   ],
   audio: [
-    {
-      id: "wav-to-mp3",
-      label: "MP3",
-      description: "Compressed audio (max 100MB)",
-      outputMime: "audio/mpeg",
-      outputExtension: "mp3",
-      isMedia: true,
-    },
+    { id: "audio-to-mp3",  label: "MP3",  description: "Compressed audio (max 100MB)",  outputMime: "audio/mpeg",       outputExtension: "mp3",  isMedia: true },
+    { id: "audio-to-wav",  label: "WAV",  description: "Lossless PCM (max 100MB)",       outputMime: "audio/wav",        outputExtension: "wav",  isMedia: true },
+    { id: "audio-to-ogg",  label: "OGG",  description: "Open Vorbis (max 100MB)",        outputMime: "audio/ogg",        outputExtension: "ogg",  isMedia: true },
+    { id: "audio-to-flac", label: "FLAC", description: "Lossless FLAC (max 100MB)",      outputMime: "audio/flac",       outputExtension: "flac", isMedia: true },
+    { id: "audio-to-m4a",  label: "M4A",  description: "AAC in M4A container (max 100MB)", outputMime: "audio/mp4",     outputExtension: "m4a",  isMedia: true },
   ],
   video: [
     {
@@ -211,10 +244,14 @@ export function getBrewsForCategory(category: FileCategory): BrewDefinition[] {
   return BREWS[category] ?? [];
 }
 
-/** Brews that actually convert to a different format (excludes same-in-as-out) */
+/** Brews that actually convert to a different format (excludes same-in-as-out and wrong-input-type) */
 export function getBrewsForFile(file: File, category: FileCategory): BrewDefinition[] {
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
   const all = getBrewsForCategory(category);
-  return all.filter((brew) => !outputMatchesFile(file, brew));
+  return all.filter((brew) => {
+    if (brew.acceptsExtensions && !brew.acceptsExtensions.includes(ext)) return false;
+    return !outputMatchesFile(file, brew);
+  });
 }
 
 export function getBrewById(id: BrewId): BrewDefinition | undefined {

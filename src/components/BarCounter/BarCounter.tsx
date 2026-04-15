@@ -13,7 +13,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { getFileCategory, CATEGORY_LABELS, type FileCategory } from "@/lib/fileTypes";
-import { type BrewId } from "@/lib/brews";
+import { type BrewId, getBrewsForFile } from "@/lib/brews";
 import { runConversion, triggerDownload } from "@/lib/conversion";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { BrewList } from "@/components/BrewList";
@@ -203,6 +203,7 @@ export function BarCounter() {
 
   const hasFile = !!file && !!fileCategory;
   const Icon = fileCategory ? CATEGORY_ICONS[fileCategory] : null;
+  const availableBrews = hasFile ? getBrewsForFile(file!, fileCategory!) : [];
 
   /* ── drop zone content ── */
   let dropzoneContent: React.ReactNode;
@@ -395,6 +396,16 @@ export function BarCounter() {
           >
             {isBrewing ? (
               <BrewingProgress progress={brewProgress} label="Brewing…" />
+            ) : availableBrews.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-start gap-2.5 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-4 py-3 text-sm text-amber-200/80"
+                style={{ fontFamily: "var(--font-sans-ui)" }}
+              >
+                <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
+                We don't have a conversion recipe for this file type yet. Drop a different ingredient.
+              </motion.div>
             ) : (
               <>
                 {brewError && (
