@@ -1,16 +1,17 @@
 {
-  "name": "taverrn-cursor",
+  "name": "brewery",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "node scripts/download-wasm.mjs"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
+    "@ffmpeg/core": "^0.12.10",
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
     "@jsquash/avif": "^2.1.1",
