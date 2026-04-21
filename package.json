@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint",
-    "postinstall": "node scripts/download-wasm.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
