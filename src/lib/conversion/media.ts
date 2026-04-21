@@ -278,7 +278,7 @@ export function runMediaConversion(
       `File is over ${MAX_MEDIA_SIZE_MB}MB. We can't brew such a large ingredient—please use a shorter clip.`
     );
 
-  if (brewId === "wav-to-mp3") return wavToMp3(file, callbacks);
+  if (brewId === ("wav-to-mp3" as unknown as BrewId)) return wavToMp3(file, callbacks);
   if (brewId === "mp4-to-gif") return mp4ToGif(file, callbacks);
 
   // Generic audio transcodes
@@ -307,7 +307,7 @@ export function runMediaConversion(
 
 export function isMediaBrew(brewId: BrewId): boolean {
   return (
-    brewId === "wav-to-mp3" ||
+    brewId === ("wav-to-mp3" as unknown as BrewId) ||
     brewId === "mp4-to-gif" ||
     AUDIO_FORMAT_IDS.includes(brewId) ||
     VIDEO_TO_FORMAT_IDS.includes(brewId) ||
