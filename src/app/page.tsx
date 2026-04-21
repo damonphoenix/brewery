@@ -4,57 +4,57 @@ import { WasmPreloader } from "@/components/WasmPreloader";
 
 export default function Home() {
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] flex-col">
+    <main className="flex min-h-[calc(100vh-6rem)] flex-col items-center w-full px-4">
       <WasmPreloader />
-      <header className="flex flex-col items-center text-center">
+      
+      <header className="flex flex-col items-center text-center mt-12 mb-16 max-w-3xl">
         <p
-          className="text-sm uppercase tracking-[0.2em] text-[var(--text-cream-muted)]"
+          className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--accent-amber)] mb-6"
           style={{ fontFamily: "var(--font-sans-ui)" }}
         >
           Est. 2026
         </p>
-        <p className="mt-4 max-w-lg text-lg leading-relaxed text-[var(--text-cream-muted)]">
-          Everything is brewed locally on your device. Straight from the tap - 100% in-house.
+        <h1 
+          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter text-[#111111] leading-[1.1] pb-2" 
+          style={{ fontFamily: "var(--font-sans-ui)" }}
+        >
+          File conversion,
+          <br className="hidden sm:block" />
+          <span className="text-[var(--text-secondary)] font-medium">straight from the tap.</span>
+        </h1>
+        <p className="mt-8 max-w-xl text-lg sm:text-xl leading-relaxed text-[var(--text-secondary)] font-normal tracking-tight">
+          Everything is brewed locally on your device. Absolutely no data leaves your browser.
         </p>
-        <div
-          className="mt-8 h-px w-16 rounded-full bg-[var(--accent-amber)]/40"
-          aria-hidden
-        />
       </header>
 
-      <div className="flex flex-1 flex-col pt-10">
+      <div className="w-full max-w-4xl flex flex-col pt-4 pb-12 z-10">
         <BarCounter />
       </div>
 
-      <footer className="mt-16 border-t border-[var(--border-subtle)] pt-8 text-center">
-        <p className="text-sm text-[var(--text-cream-muted)]">
-          Brewed locally · No data ever leaves your device
-        </p>
+      <footer className="mt-auto pt-12 text-center z-10 w-full mb-8">
         <nav
-          className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm"
+          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium"
           aria-label="Footer links"
         >
           <Link
             href="/privacy"
-            className="text-[var(--text-cream-muted)] underline decoration-[var(--border-subtle)] underline-offset-4 transition-colors hover:text-[var(--accent-amber)] hover:decoration-[var(--accent-amber)]/50"
+            className="text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-amber)]"
           >
-            Privacy Policy
+            Privacy
           </Link>
-          <span className="text-[var(--border-subtle)]" aria-hidden>·</span>
           <Link
             href="/terms"
-            className="text-[var(--text-cream-muted)] underline decoration-[var(--border-subtle)] underline-offset-4 transition-colors hover:text-[var(--accent-amber)] hover:decoration-[var(--accent-amber)]/50"
+            className="text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-amber)]"
           >
-            Terms of Service
+            Terms
           </Link>
-          <span className="text-[var(--border-subtle)]" aria-hidden>·</span>
           <a
-            href="https://github.com/damonphoenix/Taverrn/issues/new"
+            href="https://github.com/damonphoenix/Brewery/issues/new"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[var(--text-cream-muted)] underline decoration-[var(--border-subtle)] underline-offset-4 transition-colors hover:text-[var(--accent-amber)] hover:decoration-[var(--accent-amber)]/50"
+            className="text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-amber)]"
           >
-            ew, bugs?
+            Bugs?
           </a>
         </nav>
       </footer>

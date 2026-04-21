@@ -27,6 +27,33 @@ Everything runs in WebAssembly inside your browser tab.
 
 ---
 
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Run locally
+
+```bash
+git clone https://github.com/damonphoenix/Brewery.git
+cd Brewery
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+### Build for production
+
+```bash
+npm run build
+npm start
+```
+
+---
+
 ## Tech stack
 
 | Layer | Technology |
@@ -43,7 +70,7 @@ Everything runs in WebAssembly inside your browser tab.
 
 ## Privacy
 
-Taverrn processes everything client-side. No file content, metadata, or personal data is ever transmitted to any server. See [Privacy Policy](/privacy) for details.
+Brewery processes everything client-side. No file content, metadata, or personal data is ever transmitted to any server. See [Privacy Policy](/privacy) for details.
 
 ---
 
@@ -51,14 +78,14 @@ Taverrn processes everything client-side. No file content, metadata, or personal
 
 Bug reports and feature requests are welcome.
 
-- **Found a bug?** → [Open an issue](https://github.com/damonphoenix/Taverrn/issues/new)
+- **Found a bug?** → [Open an issue](https://github.com/damonphoenix/Brewery/issues/new)
 - **Want to contribute?** → Fork the repo, make your changes, and open a pull request
 
 ---
 
 ## Support
 
-If Taverrn saved you time, consider [buying a coffee](https://ko-fi.com/damonphoenix). ☕
+If Brewery saved you time, consider [buying a coffee](https://ko-fi.com/damonphoenix). ☕
 
 ---
 

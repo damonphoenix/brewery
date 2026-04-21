@@ -36,10 +36,10 @@ export function FileSummary({ name, size, category }: FileSummaryProps) {
           <Icon className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-[var(--text-cream)]" title={name}>
+          <p className="truncate text-sm font-medium text-[var(--text-primary)]" title={name}>
             {name}
           </p>
-          <p className="text-xs text-[var(--text-cream-muted)]">
+          <p className="text-xs text-[var(--text-secondary)]">
             {formatBytes(size)} · {CATEGORY_LABELS[category]}
           </p>
         </div>

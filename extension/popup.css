@@ -1,0 +1,52 @@
+/*
+ * Brewery Extension — popup.css
+ * Primary UI surface (popup). Chrome max: 800×600px.
+ * We use 420×580px — wide enough to feel premium, tall enough for batch lists.
+ * Inherits full design system from sidepanel.css.
+ */
+
+html {
+  width: 420px;
+  min-width: 420px;
+}
+
+body {
+  width: 420px;
+  min-width: 420px;
+  min-height: unset;
+  max-height: 580px;
+  overflow: hidden;
+}
+
+#app {
+  min-height: unset;
+  max-height: 580px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+  padding: 18px 18px 20px;
+}
+
+/* Drop zone slightly more compact  */
+.drop-zone-idle {
+  padding: 32px 24px;
+  min-height: 170px;
+}
+
+/* File list: 3 cards visible before scroll */
+.file-list {
+  max-height: 180px;
+}
+
+/* Category groups scrollable area */
+#groups-container {
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+/* Footer is tighter */
+.footer { padding-top: 14px; }

@@ -63,10 +63,10 @@ export function FileWithMenu({
           <Icon className="h-4 w-4" />
         </div>
         <div className="relative z-10 min-w-0 flex-1 pointer-events-none">
-          <p className="truncate text-sm font-medium text-[var(--text-cream)]" title={file.name}>
+          <p className="truncate text-sm font-medium text-[var(--text-primary)]" title={file.name}>
             {file.name}
           </p>
-          <p className="text-xs text-[var(--text-cream-muted)]">
+          <p className="text-xs text-[var(--text-secondary)]">
             {formatBytes(file.size)} · {CATEGORY_LABELS[category]}
           </p>
         </div>
@@ -77,7 +77,7 @@ export function FileWithMenu({
               e.stopPropagation();
               onClear();
             }}
-            className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[var(--text-cream-muted)] transition-colors hover:bg-[var(--bg-charred-muted)] hover:text-[var(--accent-amber)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)]"
+            className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface)] hover:text-[var(--accent-amber)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)]"
             aria-label="Remove ingredient"
             title="Remove ingredient"
           >
@@ -87,7 +87,7 @@ export function FileWithMenu({
         <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
-          className="relative z-10 shrink-0 text-[var(--text-cream-muted)] pointer-events-none"
+          className="relative z-10 shrink-0 text-[var(--text-secondary)] pointer-events-none"
           aria-hidden
         >
           <ChevronDown className="h-5 w-5" />

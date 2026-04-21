@@ -34,29 +34,24 @@ export function BrewList({
   if (!brews.length) return null;
 
   const menuContent = (
-    <>
-      {/* Menu header - like a sign */}
-      <div className="relative border-b border-[var(--accent-amber)]/20 bg-[var(--bg-charred)]/60 px-4 py-4 text-center sm:px-6 sm:py-4">
+    <div className="flex flex-col gap-3">
+      {/* Menu header */}
+      <div className="px-2 pb-1 text-center">
         <h2
-          className="text-lg font-medium tracking-wide text-[var(--text-cream)] sm:text-xl"
-          style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+          className="text-lg font-medium tracking-wide text-[var(--text-primary)] sm:text-xl"
+          
         >
-          House Brews
+          Select format
         </h2>
         <p
-          className="mt-0.5 text-sm text-[var(--text-cream-muted)]"
-          style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
+          className="mt-0.5 text-sm text-[var(--text-secondary)] font-medium"
         >
-          Choose your format
+          Click a button below to begin brewing
         </p>
-        <div
-          className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--accent-amber)]/25 to-transparent sm:left-6 sm:right-6"
-          aria-hidden
-        />
       </div>
 
-      {/* Menu items - classic tavern list with dotted leaders */}
-      <div className="px-4 py-3 sm:px-6 sm:py-4" role="list" aria-label="Available brew formats">
+      {/* Menu items - soft interactive pills */}
+      <div className="flex flex-col gap-3" role="list" aria-label="Available brew formats">
         {brews.map((brew, index) => {
           const overLimit = isOverMediaLimit(fileSize, brew);
           const isDisabled = disabled || overLimit;
@@ -66,64 +61,58 @@ export function BrewList({
               type="button"
               disabled={isDisabled}
               onClick={() => !isDisabled && onSelectBrew(brew.id)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.05 }}
-              className="group relative flex w-full cursor-pointer items-center gap-3 border-b border-[var(--border-subtle)] py-4 text-left transition-colors last:border-b-0 last:pb-0 first:pt-0 hover:bg-[var(--accent-amber)]/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)] focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent sm:gap-4 sm:px-1 sm:-mx-1 sm:rounded"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05, duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
+              whileHover={!isDisabled ? { backgroundColor: 'var(--bg-elevated)' } : {}}
+              whileTap={!isDisabled ? { scale: 1 } : {}}
+              className="group relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-[1.5rem] border border-[var(--border-subtle)] bg-[var(--bg-surface)] backdrop-blur-xl px-5 py-4 transition-colors hover:border-[var(--accent-amber)]/40 hover:bg-[#fff7ed] hover:shadow-[0_8px_30px_rgba(224,142,54,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-[var(--bg-surface)]"
               role="listitem"
               aria-label={`Brew to ${brew.label}: ${brew.description}`}
             >
-              {/* Format name */}
-              <span
-                className="shrink-0 text-base font-medium text-[var(--text-cream)] sm:text-lg"
-                style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
-              >
-                {brew.label}
-              </span>
-              {/* Dotted leader line */}
-              <span
-                className="min-h-0 flex-1 self-center border-b border-dotted border-[var(--text-cream-muted)]/25"
-                aria-hidden
-              />
-              {/* Notes (desktop) + Brew label */}
-              <div className="flex shrink-0 items-center gap-3 sm:gap-4">
-                <span className="hidden max-w-[11rem] text-sm text-[var(--text-cream-muted)] sm:block">
+              {/* Format Details */}
+              <div className="flex flex-col items-start gap-1">
+                <span
+                  className="shrink-0 text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-amber)] transition-colors"
+                  
+                >
+                  {brew.label}
+                </span>
+                <span className="text-xs font-medium text-[var(--text-secondary)] text-left">
                   {brew.description}
                   {overLimit && (
-                    <span className="mt-0.5 block text-[var(--accent-amber)]/90">
-                      Over {MAX_MEDIA_SIZE_MB}MB
+                    <span className="ml-1 inline-block text-red-500">
+                      (Over {MAX_MEDIA_SIZE_MB}MB)
                     </span>
                   )}
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-md border border-[var(--accent-amber)]/30 bg-[var(--accent-amber)]/10 px-4 py-2 text-sm font-medium text-[var(--accent-amber)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] group-hover:bg-[var(--accent-amber)]/20 group-hover:border-[var(--accent-amber)]/50">
+              </div>
+              
+              {/* Brew Action */}
+              <div className="flex shrink-0 items-center justify-center">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--accent-amber)]/10 text-[var(--accent-amber)] transition-colors group-hover:bg-[var(--accent-amber)] group-hover:text-white">
                   <Beaker className="h-4 w-4" aria-hidden />
-                  Brew
                 </span>
               </div>
             </motion.button>
           );
         })}
       </div>
-    </>
+    </div>
   );
 
   if (nested) {
-    return <div className="relative">{menuContent}</div>;
+    return <div className="relative mt-8">{menuContent}</div>;
   }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      className="relative"
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay: index * 0.05, duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
+      className="relative mt-8"
     >
-      <Card
-        variant="glow"
-        className="overflow-hidden border-2 border-[var(--accent-amber)]/20 shadow-[inset_0_0_0_1px_rgba(224,142,54,0.08),0_4px_24px_rgba(0,0,0,0.3)]"
-      >
-        {menuContent}
-      </Card>
+      {menuContent}
     </motion.div>
   );
 }

@@ -24,7 +24,7 @@ export function TipJar({ onClose, fileName }: TipJarProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="absolute right-4 top-4 rounded-full p-2 text-[var(--text-cream-muted)] hover:bg-[var(--bg-charred-muted)] hover:text-[var(--text-cream)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)]"
+                className="absolute right-4 top-4 rounded-full p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-amber)]"
                 aria-label="Close tip jar"
             >
                 <X className="h-5 w-5" />
@@ -48,7 +48,7 @@ export function TipJar({ onClose, fileName }: TipJarProps) {
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="mb-2 text-2xl tracking-wide text-[var(--text-cream)]"
+                className="mb-2 text-2xl tracking-wide text-[var(--text-primary)]"
                 style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}
             >
                 Brewed to Perfection.
@@ -58,10 +58,10 @@ export function TipJar({ onClose, fileName }: TipJarProps) {
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="mb-8 max-w-sm text-sm leading-relaxed text-[var(--text-cream-muted)]"
+                className="mb-8 max-w-sm text-sm leading-relaxed text-[var(--text-secondary)]"
             >
                 Your file <strong>{fileName}</strong> was brewed completely on your device.
-                If this saved you time, consider tossing a coin to your brewer!
+                This web app is completely free and has no ads, so please consider tossing a coin to support your bartender!
             </motion.p>
 
             <motion.div

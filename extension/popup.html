@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400">
+  <title>Brewery</title>
+  <!-- Load full design system first, then compact overrides -->
+  <link rel="stylesheet" href="sidepanel.css">
+  <link rel="stylesheet" href="popup.css">
+  <style>body { background: #14100e; } #app { visibility: hidden; } #app.ready { visibility: visible; }</style>
+</head>
+<body>
+  <!-- Identical structure to sidepanel.html — shares sidepanel.js -->
+  <div id="app">
+    <header class="header">
+      <div class="logo" role="banner">
+        <span class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="barrel-body">
+              <path d="M10 6 C 10 5, 22 5, 22 6 C 26 16, 26 22, 22 26 C 22 27, 10 27, 10 26 C 6 22, 6 16, 10 6 Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M 8 11 L 24 11 M 8 21 L 24 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M 13 11 L 13 21 M 16 11 L 16 21 M 19 11 L 19 21" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.5" />
+            </g>
+            <g id="barrel-tap">
+              <path d="M 23 18 L 27 18 A 1 1 0 0 1 28 19 L 28 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M 26.5 15 L 26.5 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </svg>
+        </span>
+        <span class="logo-wordmark">Brewery</span>
+        <span class="logo-badge">local</span>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <div id="state-idle">
+        <div id="drop-zone" class="drop-zone" role="button" tabindex="0" aria-label="Drop your files here or click to browse">
+          <div class="drop-zone-idle">
+            <div class="drop-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <p class="drop-title" id="drop-title">Drop your ingredients here</p>
+            <p class="drop-sub">or click to browse</p>
+          </div>
+          <input id="file-input" type="file" multiple class="sr-only" tabindex="-1">
+        </div>
+        <div id="drop-error" class="hidden" role="alert"></div>
+      </div>
+
+      <div id="state-files" class="hidden">
+        <div id="drop-zone-compact" class="drop-zone has-files" role="button" tabindex="0" style="padding:10px 14px;min-height:unset;cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="drop-icon-wrap" style="width:30px;height:30px;border-radius:8px;" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            <p style="font-size:12px;color:var(--text-secondary);">Add more — any type welcome</p>
+          </div>
+          <input id="file-input-compact" type="file" multiple class="sr-only" tabindex="-1">
+        </div>
+        <div id="drop-error-compact" class="hidden" role="alert"></div>
+
+        <div class="files-header" style="margin-top:12px;">
+          <span class="files-label" id="files-count-label">0 ingredients</span>
+          <button class="btn-clear-all" id="btn-clear-all" type="button">Clear all</button>
+        </div>
+
+        <div id="groups-container"></div>
+
+        <div id="brew-error" class="hidden" role="alert"></div>
+        <div id="status-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+      </div>
+
+      <div id="state-done" class="hidden">
+        <div class="done-section">
+          <p class="done-heading">All brewed! 🍺</p>
+          <p class="done-sub" id="done-sub">Your files are ready.</p>
+          <button class="btn-reset" id="btn-reset" type="button">Brew more →</button>
+        </div>
+        <div id="done-file-list"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Brewed locally &middot; No data ever leaves your device</p>
+    </footer>
+  </div>
+
+  <!-- Reuse the exact same JS as sidepanel -->
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

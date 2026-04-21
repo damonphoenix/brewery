@@ -1,4 +1,4 @@
-const DB_NAME = "TaverrnStorage";
+const DB_NAME = "BreweryStorage";
 const STORE_NAME = "files";
 const DB_VERSION = 1;
 
