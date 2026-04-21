@@ -110,7 +110,7 @@ async function decodeImage(
     await page.render({
       canvasContext: canvas.getContext("2d")!,
       viewport,
-    }).promise;
+    } as any).promise;
     const imageData = canvas.getContext("2d")!.getImageData(0, 0, canvas.width, canvas.height);
     return {
       data: imageData.data,
