@@ -1,8 +1,8 @@
-# Taverrn
+# Brewery
 
 > **Brew your files — 100% local, straight from the tap.**
 
-Taverrn is a privacy-first, browser-based file converter. Drop any supported file on the bar counter and convert it to another format — entirely on your device. No uploads. No servers. No data ever leaves your machine.
+Brewery is a privacy-first, browser-based file converter. Drop any supported file on the bar counter and convert it to another format — entirely on your device. No uploads. No servers. No data ever leaves your machine.
 
 ---
 
@@ -24,33 +24,6 @@ Everything runs in WebAssembly inside your browser tab.
 | **Audio** | MP3, WAV, OGG, FLAC, M4A | MP3, WAV, OGG, FLAC, M4A |
 | **Video** | MP4, MOV, AVI, MKV, WebM, WMV, FLV | MP4, MOV, AVI, MKV, WebM, WMV, FLV, GIF, MP3, WAV |
 | **Text / Data** | JSON, NDJSON, CSV, Parquet | JSON, CSV, Parquet |
-
----
-
-## Getting started
-
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-
-### Run locally
-
-```bash
-git clone https://github.com/damonphoenix/Taverrn.git
-cd Taverrn
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### Build for production
-
-```bash
-npm run build
-npm start
-```
 
 ---
 
