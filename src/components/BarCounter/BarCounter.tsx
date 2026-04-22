@@ -15,11 +15,11 @@ import {
 import { getFileCategory, CATEGORY_LABELS, type FileCategory } from "@/lib/fileTypes";
 import { type BrewId, getBrewsForFile } from "@/lib/brews";
 import { runConversion, triggerDownload } from "@/lib/conversion";
-import { BrewList } from "@/components/BrewList";
 import { BrewingProgress } from "@/components/BrewingProgress";
 import { TipJar } from "@/components/TipJar";
 import { saveFile, loadFile, clearFile } from "@/lib/storage";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { TavernMenu } from "@/components/TavernMenu";
 
 /* ─── helpers ─────────────────────────────────────────────────────────────── */
 
@@ -381,54 +381,63 @@ export function BarCounter() {
         )}
       </AnimatePresence>
 
-      {/* ── Brew menu (only visible after a valid file drop) ── */}
+      <div className="relative mt-8 flex w-full max-w-xl items-center gap-4 px-2">
+        <span className="h-px flex-1 bg-[var(--accent-amber)]/30" />
+        <span
+          className="text-xs font-semibold uppercase tracking-[0.32em] text-[var(--accent-amber)]"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Or
+        </span>
+        <span className="h-px flex-1 bg-[var(--accent-amber)]/30" />
+      </div>
+
       <AnimatePresence>
-        {hasFile && !showTipJar && (
+        {brewError && (
           <motion.div
-            ref={menuRef}
-            key="brew-menu"
-            initial={{ opacity: 0, y: 16 }}
+            key="brew-error"
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="mt-8"
+            exit={{ opacity: 0, y: -6 }}
+            className="mt-6 flex items-start gap-2.5 rounded-2xl border border-red-500/20 bg-red-50 px-5 py-4 text-sm font-medium text-red-800 shadow-sm"
+            style={{ fontFamily: "var(--font-sans-ui)" }}
           >
-            {isBrewing ? (
-              <BrewingProgress progress={brewProgress} label="Brewing…" />
-            ) : availableBrews.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-start gap-2.5 rounded-2xl border border-amber-500/20 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-800 shadow-sm"
-                style={{ fontFamily: "var(--font-sans-ui)" }}
-              >
-                <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" aria-hidden />
-                {"We don't have a conversion recipe for this file type yet. Drop a different ingredient."}
-              </motion.div>
-            ) : (
-              <>
-                {brewError && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 flex items-start gap-2.5 rounded-2xl border border-red-500/20 bg-red-50 px-5 py-4 text-sm font-medium text-red-800 shadow-sm"
-                    style={{ fontFamily: "var(--font-sans-ui)" }}
-                  >
-                    <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" aria-hidden />
-                    {brewError}
-                  </motion.div>
-                )}
-                <BrewList
-                  file={file}
-                  fileSize={file.size}
-                  category={fileCategory}
-                  onSelectBrew={handleBrewSelect}
-                />
-              </>
-            )}
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" aria-hidden />
+            {brewError}
           </motion.div>
         )}
       </AnimatePresence>
+
+      <motion.div
+        ref={menuRef}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="mt-6"
+      >
+        {isBrewing ? (
+          <div className="mb-6">
+            <BrewingProgress progress={brewProgress} label="Brewing…" />
+          </div>
+        ) : hasFile && !showTipJar && availableBrews.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 flex items-start gap-2.5 rounded-2xl border border-amber-500/20 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-800 shadow-sm"
+            style={{ fontFamily: "var(--font-sans-ui)" }}
+          >
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" aria-hidden />
+            {"We don't have a conversion recipe for this file type yet. Drop a different ingredient."}
+          </motion.div>
+        ) : null}
+
+        <TavernMenu
+          file={file}
+          category={fileCategory}
+          onSelectBrew={hasFile && !showTipJar && availableBrews.length ? handleBrewSelect : undefined}
+          disabled={isBrewing}
+        />
+      </motion.div>
     </section>
   );
 }

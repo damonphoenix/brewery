@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
-import { Coffee, Chrome } from "lucide-react";
+import { Coffee } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { ChromiumInstallButton } from "@/components/ChromiumInstallButton";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -113,16 +114,10 @@ export default function RootLayout({
                   <Coffee className="h-4 w-4" />
                   Tip the Brewer
                 </a>
-                <a
+                <ChromiumInstallButton
                   href="https://chromewebstore.google.com/detail/dia-browser-ai-chat-with/bdabofmhlffpepnnkfcdnpiikpcigkko"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm transition-all hover:bg-gray-50 hover:border-gray-300 hover:shadow disabled:opacity-50 disabled:cursor-not-allowed group"
-                  aria-label="Add to Dia"
-                >
-                  <Chrome className="h-4 w-4 text-blue-500 group-hover:text-blue-600 transition-colors" />
-                  Add to Dia
-                </a>
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--accent-amber)]/25 bg-[var(--bg-surface)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] shadow-sm transition-all hover:border-[var(--accent-amber)]/45 hover:shadow disabled:opacity-50 disabled:cursor-not-allowed group"
+                />
               </div>
             </header>
             {children}
