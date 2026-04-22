@@ -114,7 +114,7 @@ export default function TermsPage() {
         <section className="space-y-3" style={{ fontFamily: "var(--font-sans-ui)" }}>
           <h2 className="text-lg font-medium text-[var(--text-primary)]">Intellectual property</h2>
           <p>
-            The Service, including its branding, design, and software, is owned by Damon Phoenix or its
+            The Service, including its branding, design, and software, is owned by Phoenix Studios or its
             licensors. These Terms do not grant you any rights to our trademarks or code except the
             limited right to use the Service as offered.
           </p>

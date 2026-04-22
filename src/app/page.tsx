@@ -40,7 +40,7 @@ export default function Home() {
             className="text-xs font-medium text-[var(--text-secondary)]"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            © Damon Phoenix 2026. All rights reserved.
+            © Phoenix Studios 2026. All rights reserved.
           </p>
           <nav
             className="flex flex-wrap items-center justify-center lg:justify-end gap-x-6 gap-y-2 text-sm font-medium"
