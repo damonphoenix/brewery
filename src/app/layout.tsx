@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://taverrn.phx.cx";
+const siteUrl = "https://brewery.phx.cx";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
