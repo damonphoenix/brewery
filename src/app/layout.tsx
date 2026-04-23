@@ -105,7 +105,7 @@ export default function RootLayout({
 
             <div className="w-full flex justify-center sm:justify-end items-center gap-4 px-4 sm:px-0">
               <a
-                href="https://ko-fi.com/damonphoenix"
+                href="https://buymeacoffee.com/damonphoenix"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent-amber)] transition-colors flex items-center gap-1.5"
