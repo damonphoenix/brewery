@@ -179,7 +179,7 @@ export function BarCounter() {
       setBrewProgress(null);
       try {
         const result = await runConversion(brewId, file, { onProgress: setBrewProgress });
-        triggerDownload(result);
+        await triggerDownload(result);
         setLastFileName(file.name);
         setShowTipJar(true);
         setTimeout(() => {

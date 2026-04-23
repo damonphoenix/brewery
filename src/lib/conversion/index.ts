@@ -33,11 +33,50 @@ export async function runConversion(
   throw new Error(`Unsupported brew: ${brewId}`);
 }
 
-export function triggerDownload(result: ConversionResult): void {
+function isIosSafari(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  const isIos =
+    /iPad|iPhone|iPod/.test(ua) ||
+    (ua.includes("Macintosh") && typeof document !== "undefined" && "ontouchend" in document);
+  const isSafari =
+    /^((?!chrome|android|crios|fxios|edgios|opios).)*safari/i.test(ua);
+  return isIos && isSafari;
+}
+
+/**
+ * Trigger a download for the converted file.
+ * - iOS Safari: use Web Share API (shows Save to Files) when available; otherwise
+ *   fall back to the standard anchor flow (which may preview PDFs inline).
+ * - Other browsers: programmatic anchor with `download` attribute.
+ */
+export async function triggerDownload(result: ConversionResult): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  if (isIosSafari()) {
+    try {
+      const file = new File([result.blob], result.filename, { type: result.blob.type });
+      const nav = navigator as Navigator & {
+        canShare?: (data: { files?: File[] }) => boolean;
+        share?: (data: { files?: File[]; title?: string }) => Promise<void>;
+      };
+      if (nav.canShare?.({ files: [file] }) && nav.share) {
+        await nav.share({ files: [file], title: result.filename });
+        return;
+      }
+    } catch (err) {
+      if ((err as DOMException)?.name === "AbortError") return;
+    }
+  }
+
   const url = URL.createObjectURL(result.blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = result.filename;
+  a.rel = "noopener";
+  a.target = "_self";
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
