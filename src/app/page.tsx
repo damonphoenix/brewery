@@ -13,7 +13,7 @@ export default function Home() {
             className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tighter text-[var(--text-primary)] leading-[1.1] pb-2"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            File conversion,
+            File conversion,{" "}
             <br className="hidden sm:block" />
             <span className="font-medium text-[var(--accent-amber)]">straight from the tap.</span>
           </h1>
@@ -21,7 +21,7 @@ export default function Home() {
             className="mt-8 max-w-xl text-lg sm:text-xl leading-relaxed tracking-tight text-[var(--text-primary)]/70"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Everything is brewed 100% locally on your device.
+            Everything is brewed 100% locally on your device.{" "}
             <br className="hidden sm:block" />
             Absolutely <span className="text-[var(--accent-amber-dim)]">no data</span> leaves your browser.
           </p>
