@@ -27,33 +27,6 @@ Everything runs in WebAssembly inside your browser tab.
 
 ---
 
-## Getting started
-
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-
-### Run locally
-
-```bash
-git clone https://github.com/damonphoenix/Brewery.git
-cd Brewery
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### Build for production
-
-```bash
-npm run build
-npm start
-```
-
----
-
 ## Tech stack
 
 | Layer | Technology |
@@ -85,7 +58,7 @@ Bug reports and feature requests are welcome.
 
 ## Support
 
-If Brewery saved you time, consider [buying a coffee](https://ko-fi.com/damonphoenix). ☕
+If Brewery saved you time, consider [buying a coffee](https://buymeacoffee.com/damonphoenix). ☕
 
 ---
 
